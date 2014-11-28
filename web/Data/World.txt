@@ -1,0 +1,64 @@
+// This is a datafile for Sokath. You can make adjustments to the data here. You can also use custom data instead of BP data.
+
+// Cumulative production and corresponding year
+
+2010 1251.79
+
+// First Year / Last Year Datapoints
+
+1983 2010
+
+// Two times four datapoints for Multi Hubbert Mode
+
+0 0 0 0
+
+0 0 0 0
+
+// Year / daily production (mbd) (Source: "Statistical Review of World Energy" compiled by British Petroleum **BP's including oil shale, tarsands and NGL**)
+
+1965 31.80
+1966 34.57
+1967 37.11
+1968 40.44
+1969 43.63
+1970 48.06
+1971 50.84
+1972 53.67
+1973 58.46
+1974 58.62
+1975 55.83
+1976 60.41
+1977 62.71
+1978 63.33
+1979 66.05
+1980 62.95
+1981 59.53
+1982 57.30
+1983 56.60
+1984 57.68
+1985 57.47
+1986 60.46
+1987 60.79
+1988 63.16
+1989 64.05
+1990 65.47
+1991 65.29
+1992 65.79
+1993 66.04
+1994 67.11
+1995 68.10
+1996 69.89
+1997 72.24
+1998 73.61
+1999 72.37
+2000 74.94
+2001 74.74
+2002 74.38
+2003 77.09
+2004 80.20
+2005 81.25
+2006 81.66
+2007 81.44
+2008 81.82
+2009 79.95
+2010 82.10
