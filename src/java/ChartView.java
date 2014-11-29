@@ -45,6 +45,7 @@ public class ChartView implements Serializable {
         ServletContext context = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
         try {
             analyzer = new Analyzer(context);
+            analyzer.readData();
         } catch (IOException ex) {
             Logger.getLogger(ChartView.class.getName()).log(Level.SEVERE, null, ex);
             showFatalError("Cannot read data.");
@@ -67,8 +68,10 @@ public class ChartView implements Serializable {
      
     private LineChartModel initLinearModel() {
         LineChartModel model = new LineChartModel();
+        
+        
  
-        LineChartSeries series1 = new LineChartSeries();
+        /*LineChartSeries series1 = new LineChartSeries();
         series1.setLabel("Series 1");
  
         series1.set(1, 2);
@@ -87,7 +90,7 @@ public class ChartView implements Serializable {
         series2.set(5, 9);
  
         model.addSeries(series1);
-        model.addSeries(series2);
+        model.addSeries(series2);*/
          
         return model;
     }

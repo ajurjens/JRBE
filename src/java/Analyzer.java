@@ -4,6 +4,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.stream.Stream;
 import javax.servlet.ServletContext;
@@ -36,48 +37,85 @@ public class Analyzer {
     private double cumProd;
     private int first;
     private int last;
+    private final ArrayList<Region> regions = new ArrayList<>();
     
     public Analyzer(ServletContext context) throws IOException {
         this.context = context;
-        readData();
     }
     
-    private void readData() throws IOException {
+    public void readData() throws IOException {
         
-        int count = 0;
+        int count;
+        ArrayList<Integer> readTimeline = new ArrayList<>();
+        ArrayList<Double> readProd = new ArrayList<>();
+        int [] multiMaximumPoints = new int [4];
+        int [] multiAdditionPoints = new int [4];
         
         try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(Paths.get(context.getRealPath("/Data")))) {
             for (Path path : dirStream) {
                 if (path.toString().endsWith(".txt")) {
                     try (Stream<String> lines = Files.lines(path)) {
+                        count = 0;
+                        readTimeline.clear();
+                        readProd.clear();
                         Iterator<String> it = lines.iterator();
                         while(it.hasNext()) {
                             String line = it.next();
-                            char c = line.charAt(0);
-                            boolean isDigit = (c >= '0' && c <= '9');
-                            if (isDigit) {
-                                if (count == 0) {
-                                    count++;
-                                    String [] data = line.split(" ");
-                                    cumYear = Integer.parseInt(data[0]);
-                                    cumProd = Double.parseDouble(data[1]);
-                                }
-                                if (count == 1) {
-                                    count++;
-                                    String [] data = line.split(" ");
-                                    first = Integer.parseInt(data[0]);
-                                    last = Integer.parseInt(data[1]);
-                                }
-                                if (count == 2 || count == 3) {
-                                    count++;
-                                    String [] data = line.split(" ");
-                                    first = Integer.parseInt(data[0]);
-                                    last = Integer.parseInt(data[1]);
+                            if (line.length() > 0) {
+                                char c = line.charAt(0);
+                                boolean isDigit = (c >= '0' && c <= '9');
+                                if (isDigit) {
+                                    if (count == 0) {
+                                        count++;
+                                        String [] data = line.split(" ");
+                                        cumYear = Integer.parseInt(data[0]);
+                                        cumProd = Double.parseDouble(data[1]);
+                                    }
+                                    else if (count == 1) {
+                                        count++;
+                                        String [] data = line.split(" ");
+                                        first = Integer.parseInt(data[0]);
+                                        last = Integer.parseInt(data[1]);
+                                    }
+                                    else if (count == 2 || count == 3) {
+                                        count++;
+                                        String [] data = line.split(" ");
+                                        if (count == 2) {
+                                            for (int i = 0; i < data.length; i++) {
+                                                multiMaximumPoints[i] = Integer.parseInt(data[i]);
+                                            }
+                                        }
+                                        if (count == 3) {
+                                            for (int i = 0; i < data.length; i++) {
+                                                multiAdditionPoints[i] = Integer.parseInt(data[i]);
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        String [] data = line.split(" ");
+                                        int year = Integer.parseInt(data[0]);
+                                        double anPr = Double.parseDouble(data[1]);
+                                        readTimeline.add(year);
+                                        readProd.add(anPr);
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                int slashIndex = path.toString().lastIndexOf("/");
+                int dotIndex = path.toString().lastIndexOf(".");
+                String name = path.toString().substring(slashIndex + 1, dotIndex);
+                Region region = new Region();
+                region.setName(name);
+                region.setCumYear(cumYear);
+                region.setCumProd(cumProd);
+                region.setReadProd(readProd);
+                region.setReadTimeline(readTimeline);
+                region.setFirstYear(first);
+                region.setLastYear(last);
+                region.setMultiMaximumDataPoints(multiMaximumPoints);
+                region.setMultiAdditionDataPoints(multiAdditionPoints);
             }
         }
     }
