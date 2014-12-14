@@ -1,6 +1,3 @@
-
-import java.util.ArrayList;
-
 /*
  * Copyright (C) 2014 Alexander Jurjens
  *
@@ -18,18 +15,21 @@ import java.util.ArrayList;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
+import java.util.ArrayList;
+
 /**
  *
  * @author Alexander Jurjens
  */
 public class HubbertCurve {
     
-       private ArrayList<Double> annualProduction; // annual Production
-       private ArrayList<Double> timeline; // timeline
+       private ArrayList<Double> annualProduction = new ArrayList<>(); // annual Production
+       private ArrayList<Double> timeline = new ArrayList<>(); // timeline
        private double peakProduction;
        private double peakYear;
-       private ArrayList<Double> multiAnnualProduction; // Multi-Cycle Hubbert Curves
-       private ArrayList<Double> multiTimeline;
+       private ArrayList<Double> multiAnnualProduction = new ArrayList<>(); // Multi-Cycle Hubbert Curves
+       private ArrayList<Double> multiTimeline = new ArrayList<>();
     
        public HubbertCurve() {};
        public HubbertCurve(ArrayList<Double> anProd, ArrayList<Double> timeline) {

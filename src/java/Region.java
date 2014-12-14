@@ -1,6 +1,3 @@
-
-import java.util.ArrayList;
-
 /*
  * Copyright (C) 2014 Alexander Jurjens
  *
@@ -18,6 +15,9 @@ import java.util.ArrayList;
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
+import java.util.ArrayList;
+
 /**
  *
  * @author Alexander Jurjens
@@ -27,17 +27,17 @@ public class Region {
     private String name;
     private double cumProd;
     private int cumYear;
-    private ArrayList <Double> readProd;
-    private ArrayList <Double> readDem;
+    private ArrayList <Double> readProd = new ArrayList<>();
+    private ArrayList <Double> readDem = new ArrayList<>();
     private double demandPercentage;
-    private ArrayList <Integer> readTimeline;
+    private ArrayList <Integer> readTimeline = new ArrayList<>();
     private int firstYear;
     private int lastYear;
-    private ArrayList <Double> pDivQ;
-    private ArrayList <Double> Q;
+    private ArrayList <Double> pDivQ = new ArrayList<>();
+    private ArrayList <Double> Q = new ArrayList<>();
     private int multiMaximumDataPoints[]; // size 4
     private int multiAdditionDataPoints[]; // size 4
-    private ArrayList<Integer> demandTimeline;
+    private ArrayList<Integer> demandTimeline = new ArrayList<>();
     
     public Region() {}
     

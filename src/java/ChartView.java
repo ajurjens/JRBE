@@ -15,9 +15,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-import java.io.IOException;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
@@ -46,9 +46,13 @@ public class ChartView implements Serializable {
         try {
             analyzer = new Analyzer(context);
             analyzer.readData();
-        } catch (IOException ex) {
+            ArrayList<Region> regions = analyzer.getRegions();
+            Region r = regions.get(0);
+            analyzer.calculateHubbertCurve(r.getName());
+            
+        } catch (Exception ex) {
             Logger.getLogger(ChartView.class.getName()).log(Level.SEVERE, null, ex);
-            showFatalError("Cannot read data.");
+            showFatalError("An error has occured. Please contact Alexander ASAP.");
         }
         createLineModels();
     }
@@ -61,36 +65,50 @@ public class ChartView implements Serializable {
         lineModel = initLinearModel();
         lineModel.setTitle("Oil Production");
         lineModel.setLegendPosition("e");
+        Axis xAxis = lineModel.getAxis(AxisType.X);
+        xAxis.setMin(1900);
+        xAxis.setMax(2050);
+        xAxis.setTickInterval("10");
         Axis yAxis = lineModel.getAxis(AxisType.Y);
         yAxis.setMin(0);
-        yAxis.setMax(10);
     }
      
     private LineChartModel initLinearModel() {
         LineChartModel model = new LineChartModel();
         
+        LineChartSeries readProductionSeries = new LineChartSeries();
         
- 
-        /*LineChartSeries series1 = new LineChartSeries();
-        series1.setLabel("Series 1");
- 
-        series1.set(1, 2);
-        series1.set(2, 1);
-        series1.set(3, 3);
-        series1.set(4, 6);
-        series1.set(5, 8);
- 
-        LineChartSeries series2 = new LineChartSeries();
-        series2.setLabel("Series 2");
- 
-        series2.set(1, 6);
-        series2.set(2, 3);
-        series2.set(3, 2);
-        series2.set(4, 7);
-        series2.set(5, 9);
- 
-        model.addSeries(series1);
-        model.addSeries(series2);*/
+        HubbertCurve[] hcs = analyzer.getHubbertCurves();
+        HubbertCurve hc = hcs[0];
+        ArrayList<Region> regions = analyzer.getRegions();
+        Region r = regions.get(0);
+        ArrayList<Integer> readTimeline = r.getReadTimeline();
+        ArrayList<Double> readProduction = r.getReadProd();
+        
+        for (int i = 0; i < readTimeline.size(); i++) {
+            readProductionSeries.set(readTimeline.get(i), readProduction.get(i));
+        }
+        
+        readProductionSeries.setLabel("World (BP)");
+        
+        readProductionSeries.setShowMarker(false);
+        
+        model.addSeries(readProductionSeries);
+        
+        ArrayList<Double> HCTimeline = hc.getTimeline();
+        ArrayList<Double> HCProduction = hc.getProduction();
+        
+        LineChartSeries HubbertSeries = new LineChartSeries();
+        
+        HubbertSeries.setShowMarker(false);
+        
+        for (int i = 0; i < HCTimeline.size(); i++) {
+            HubbertSeries.set(HCTimeline.get(i), HCProduction.get(i));
+        }
+        
+        HubbertSeries.setLabel("World (Hubbert)");
+        
+        model.addSeries(HubbertSeries);
          
         return model;
     }
