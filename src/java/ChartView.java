@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Alexander Jurjens
+ * Copyright (C) 2015 Alexander Jurjens
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,7 +63,7 @@ public class ChartView implements Serializable {
      
     private void createLineModels() {
         lineModel = initLinearModel();
-        lineModel.setTitle("Oil Production");
+        lineModel.setTitle("Oil Production (MBPD vs time in years)");
         lineModel.setLegendPosition("e");
         Axis xAxis = lineModel.getAxis(AxisType.X);
         xAxis.setMin(1900);
@@ -106,7 +106,7 @@ public class ChartView implements Serializable {
             HubbertSeries.set(HCTimeline.get(i), HCProduction.get(i));
         }
         
-        HubbertSeries.setLabel("World (Hubbert)");
+        HubbertSeries.setLabel("World (Hubbert Model Prediction)");
         
         model.addSeries(HubbertSeries);
          

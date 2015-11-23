@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Alexander
+ * Copyright (C) 2015 Alexander
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,6 +17,7 @@
  */
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,7 +25,7 @@ import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.stream.Stream;
+import java.util.List;
 import javax.servlet.ServletContext;
 
 /**
@@ -79,50 +80,49 @@ public class Analyzer {
         try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(Paths.get(context.getRealPath("/Data")))) {
             for (Path path : dirStream) {
                 if (path.toString().endsWith(".txt")) {
-                    try (Stream<String> lines = Files.lines(path)) {
-                        count = 0;
-                        readTimeline.clear();
-                        readProd.clear();
-                        Iterator<String> it = lines.iterator();
-                        while(it.hasNext()) {
-                            String line = it.next();
-                            if (line.length() > 0) {
-                                char c = line.charAt(0);
-                                boolean isDigit = (c >= '0' && c <= '9');
-                                if (isDigit) {
-                                    if (count == 0) {
-                                        count++;
-                                        String [] data = line.split(" ");
-                                        cumYear = Integer.parseInt(data[0]);
-                                        cumProd = Double.parseDouble(data[1]);
-                                    }
-                                    else if (count == 1) {
-                                        count++;
-                                        String [] data = line.split(" ");
-                                        first = Integer.parseInt(data[0]);
-                                        last = Integer.parseInt(data[1]);
-                                    }
-                                    else if (count == 2 || count == 3) {
-                                        count++;
-                                        String [] data = line.split(" ");
-                                        if (count == 2) {
-                                            for (int i = 0; i < data.length; i++) {
-                                                multiMaximumPoints[i] = Integer.parseInt(data[i]);
-                                            }
-                                        }
-                                        if (count == 3) {
-                                            for (int i = 0; i < data.length; i++) {
-                                                multiAdditionPoints[i] = Integer.parseInt(data[i]);
-                                            }
+                    List<String> lines = Files.readAllLines(path, Charset.defaultCharset() );
+                    count = 0;
+                    readTimeline.clear();
+                    readProd.clear();
+                    Iterator<String> it = lines.iterator();
+                    while(it.hasNext()) {
+                        String line = it.next();
+                        if (line.length() > 0) {
+                            char c = line.charAt(0);
+                            boolean isDigit = (c >= '0' && c <= '9');
+                            if (isDigit) {
+                                if (count == 0) {
+                                    count++;
+                                    String [] data = line.split(" ");
+                                    cumYear = Integer.parseInt(data[0]);
+                                    cumProd = Double.parseDouble(data[1]);
+                                }
+                                else if (count == 1) {
+                                    count++;
+                                    String [] data = line.split(" ");
+                                    first = Integer.parseInt(data[0]);
+                                    last = Integer.parseInt(data[1]);
+                                }
+                                else if (count == 2 || count == 3) {
+                                    count++;
+                                    String [] data = line.split(" ");
+                                    if (count == 2) {
+                                        for (int i = 0; i < data.length; i++) {
+                                            multiMaximumPoints[i] = Integer.parseInt(data[i]);
                                         }
                                     }
-                                    else {
-                                        String [] data = line.split(" ");
-                                        int year = Integer.parseInt(data[0]);
-                                        double anPr = Double.parseDouble(data[1]);
-                                        readTimeline.add(year);
-                                        readProd.add(anPr);
+                                    if (count == 3) {
+                                        for (int i = 0; i < data.length; i++) {
+                                            multiAdditionPoints[i] = Integer.parseInt(data[i]);
+                                        }
                                     }
+                                }
+                                else {
+                                    String [] data = line.split(" ");
+                                    int year = Integer.parseInt(data[0]);
+                                    double anPr = Double.parseDouble(data[1]);
+                                    readTimeline.add(year);
+                                    readProd.add(anPr);
                                 }
                             }
                         }
