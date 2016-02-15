@@ -34,15 +34,25 @@
         </h:head>
 
         <h:body>
-            <p:chart id="chart" type="line" model="#{chartView.lineModel1}" />
-            <p:panelGrid columns="1" styleClass="centerButtonGrid">
-                <p:button outcome="AdvancedView" value="Switch to Advanced View">
-                </p:button>
-            </p:panelGrid>
-            <script>
-                $("#chart").height($(window).height() - 200);
-                $("#chart").width($(window).width() - 50);
-            </script>
+            <h:form id="form">
+                <p:tabView>
+                    <p:tab title="Hubbert Curve">
+                        <h:outputText
+                            value="Work In Progress: Hubbert Curve will be here." />
+                        <p:panelGrid columns="1" styleClass="centerButtonGrid">
+                            <p:button outcome="index" value="Switch to Simple View">
+                            </p:button>
+                        </p:panelGrid>
+                    </p:tab>
+                    <p:tab title="Hubbert Linearization">
+                        <h:outputText value="Work In Progress: Hubbert Linearization will be here" />
+                        <p:panelGrid columns="1" styleClass="centerButtonGrid">
+                            <p:button outcome="index" value="Switch to Simple View">
+                            </p:button>
+                        </p:panelGrid>
+                    </p:tab>
+                </p:tabView>
+            </h:form>
         </h:body>
 
     </f:view>
